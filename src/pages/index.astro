@@ -3,17 +3,333 @@ import BaseHead from "../components/BaseHead.astro";
 import Header from "../components/Header.astro";
 import Footer from "../components/Footer.astro";
 import { SITE_TITLE, SITE_DESCRIPTION } from "../consts";
+import { getCollection } from "astro:content";
+import { Image } from "astro:assets";
+import FormattedDate from "../components/FormattedDate.astro";
+
+const posts = (await getCollection("blog")).sort(
+  (a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf()
+);
+const recentPosts = posts.slice(0, 2);
 ---
 
 <!doctype html>
 <html lang="en">
   <head>
     <BaseHead title={SITE_TITLE} description={SITE_DESCRIPTION} />
+    <style>
+      .hero {
+        text-align: center;
+        padding: 3em 0 2em;
+      }
+      .hero h1 {
+        font-size: 3.5em;
+        margin-bottom: 0.2em;
+        color: rgb(var(--black));
+      }
+      .hero .tagline {
+        font-size: 1.5em;
+        color: rgb(var(--gray));
+        margin-bottom: 1em;
+      }
+      .hero .summary {
+        font-size: 1.1em;
+        line-height: 1.6;
+        max-width: 600px;
+        margin: 0 auto 2em;
+        color: rgb(var(--gray-dark));
+      }
+      .cta-buttons {
+        display: flex;
+        gap: 1em;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .cta-button {
+        display: inline-block;
+        padding: 0.8em 2em;
+        background: var(--accent);
+        color: white;
+        text-decoration: none;
+        border-radius: 8px;
+        font-weight: 700;
+        transition: background 0.2s ease;
+      }
+      .cta-button:hover {
+        background: var(--accent-dark);
+        color: white;
+      }
+      .cta-button.secondary {
+        background: white;
+        color: var(--accent);
+        border: 2px solid var(--accent);
+      }
+      .cta-button.secondary:hover {
+        background: var(--accent);
+        color: white;
+      }
+      .about-teaser {
+        background: white;
+        padding: 2em;
+        border-radius: 12px;
+        box-shadow: var(--box-shadow);
+        margin: 3em 0;
+      }
+      .about-teaser h2 {
+        margin-top: 0;
+        color: rgb(var(--black));
+      }
+      .about-teaser p {
+        margin-bottom: 1em;
+      }
+      .about-teaser a {
+        color: var(--accent);
+        text-decoration: none;
+        font-weight: 700;
+      }
+      .about-teaser a:hover {
+        text-decoration: underline;
+      }
+      .skills {
+        margin: 3em 0;
+      }
+      .skills h2 {
+        text-align: center;
+        margin-bottom: 1.5em;
+        color: rgb(var(--black));
+      }
+      .skills-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 1.5em;
+      }
+      .skill-category {
+        background: white;
+        padding: 1.5em;
+        border-radius: 8px;
+        box-shadow: 0 2px 8px rgba(var(--gray), 15%);
+      }
+      .skill-category h3 {
+        font-size: 1.2em;
+        margin-bottom: 0.8em;
+        color: var(--accent);
+      }
+      .skill-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
+      .skill-tag {
+        background: rgb(var(--gray-light));
+        padding: 0.3em 0.8em;
+        border-radius: 4px;
+        font-size: 0.9em;
+        color: rgb(var(--gray-dark));
+      }
+      .recent-posts {
+        margin: 3em 0;
+      }
+      .recent-posts h2 {
+        text-align: center;
+        margin-bottom: 1.5em;
+        color: rgb(var(--black));
+      }
+      .posts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2em;
+      }
+      .post-card {
+        background: white;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 2px 8px rgba(var(--gray), 15%);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        text-decoration: none;
+        color: inherit;
+        display: block;
+      }
+      .post-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--box-shadow);
+      }
+      .post-card img {
+        width: 100%;
+        height: 200px;
+        object-fit: cover;
+        border-radius: 0;
+      }
+      .post-card-content {
+        padding: 1.5em;
+      }
+      .post-card h3 {
+        margin-top: 0;
+        margin-bottom: 0.5em;
+        color: rgb(var(--black));
+      }
+      .post-card .date {
+        color: rgb(var(--gray));
+        font-size: 0.9em;
+      }
+      .contact {
+        background: white;
+        padding: 2em;
+        border-radius: 12px;
+        box-shadow: var(--box-shadow);
+        margin: 3em 0;
+        text-align: center;
+      }
+      .contact h2 {
+        margin-top: 0;
+        color: rgb(var(--black));
+      }
+      .contact p {
+        margin-bottom: 1.5em;
+      }
+      .contact-links {
+        display: flex;
+        gap: 1em;
+        justify-content: center;
+        flex-wrap: wrap;
+      }
+      .contact-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.8em 1.5em;
+        background: rgb(var(--gray-light));
+        color: rgb(var(--gray-dark));
+        text-decoration: none;
+        border-radius: 8px;
+        transition: background 0.2s ease;
+      }
+      .contact-link:hover {
+        background: var(--accent);
+        color: white;
+      }
+      @media (max-width: 720px) {
+        .hero h1 {
+          font-size: 2.5em;
+        }
+        .hero .tagline {
+          font-size: 1.2em;
+        }
+        .cta-buttons {
+          flex-direction: column;
+          align-items: stretch;
+        }
+        .cta-button {
+          text-align: center;
+        }
+      }
+    </style>
   </head>
   <body>
     <Header />
     <main>
-      <Footer />
+      <section class="hero">
+        <h1>Hi, I'm Mir Sameer Irfan</h1>
+        <p class="tagline">Full-Stack Developer | React & Node.js Enthusiast</p>
+        <p class="summary">
+          I build scalable web applications with modern technologies. Passionate about creating seamless user experiences and robust backend systems.
+        </p>
+        <div class="cta-buttons">
+          <a href="/projects" class="cta-button">View Projects</a>
+          <a href="/blog" class="cta-button secondary">Read Blog</a>
+          <a href="#contact" class="cta-button secondary">Contact Me</a>
+        </div>
+      </section>
+
+      <section class="about-teaser">
+        <h2>About Me</h2>
+        <p>
+          I'm a full-stack developer based in Kitchener, Ontario with over three years of experience crafting robust web applications. I specialize in React, Next.js, Node.js, and Express, bringing ideas to life across the entire development stack.
+        </p>
+        <p>
+          I thrive in agile environments and love tackling complex challenges to optimize performance and deliver seamless user experiences.
+        </p>
+        <a href="/about">Learn more about me →</a>
+      </section>
+
+      <section class="skills">
+        <h2>Skills & Technologies</h2>
+        <div class="skills-grid">
+          <div class="skill-category">
+            <h3>Frontend</h3>
+            <div class="skill-tags">
+              <span class="skill-tag">React</span>
+              <span class="skill-tag">Next.js</span>
+              <span class="skill-tag">Redux</span>
+              <span class="skill-tag">TailwindCSS</span>
+              <span class="skill-tag">Bootstrap</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h3>Backend</h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Node.js</span>
+              <span class="skill-tag">Express</span>
+              <span class="skill-tag">REST APIs</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h3>Databases</h3>
+            <div class="skill-tags">
+              <span class="skill-tag">MongoDB</span>
+              <span class="skill-tag">PostgreSQL</span>
+            </div>
+          </div>
+          <div class="skill-category">
+            <h3>Tools & Others</h3>
+            <div class="skill-tags">
+              <span class="skill-tag">Git/GitHub</span>
+              <span class="skill-tag">CI/CD</span>
+              <span class="skill-tag">Cloud Platforms</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {recentPosts.length > 0 && (
+        <section class="recent-posts">
+          <h2>Recent Blog Posts</h2>
+          <div class="posts-grid">
+            {recentPosts.map((post) => (
+              <a href={`/blog/${post.id}/`} class="post-card">
+                {post.data.heroImage && (
+                  <Image width={400} height={200} src={post.data.heroImage} alt="" />
+                )}
+                <div class="post-card-content">
+                  <h3>{post.data.title}</h3>
+                  <p class="date">
+                    <FormattedDate date={post.data.pubDate} />
+                  </p>
+                </div>
+              </a>
+            ))}
+          </div>
+        </section>
+      )}
+
+      <section class="contact" id="contact">
+        <h2>Let's Connect</h2>
+        <p>I'm always open to discussing new projects, opportunities, or just having a chat about technology.</p>
+        <div class="contact-links">
+          <a href="mailto:mirsameerirfan@gmail.com" class="contact-link">
+            📧 Email
+          </a>
+          <a href="https://github.com/mirsameerirfan" target="_blank" class="contact-link">
+            💻 GitHub
+          </a>
+          <a href="https://x.com/Mirsameer_" target="_blank" class="contact-link">
+            🐦 Twitter
+          </a>
+          <a href="https://linkedin.com/in/mirsameerirfan" target="_blank" class="contact-link">
+            💼 LinkedIn
+          </a>
+        </div>
+      </section>
     </main>
+    <Footer />
   </body>
 </html>
