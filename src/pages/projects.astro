@@ -1,0 +1,201 @@
+---
+import BaseHead from "../components/BaseHead.astro";
+import Header from "../components/Header.astro";
+import Footer from "../components/Footer.astro";
+import { SITE_TITLE } from "../consts";
+
+const projects = [
+  {
+    title: "E-Commerce Platform",
+    description: "A full-stack e-commerce application with user authentication, product management, shopping cart, and payment integration. Features include real-time inventory updates and order tracking.",
+    technologies: ["React", "Next.js", "Node.js", "MongoDB", "Stripe API"],
+    github: "https://github.com/mirsameerirfan",
+    demo: null,
+  },
+  {
+    title: "Task Management Dashboard",
+    description: "A collaborative task management system with real-time updates, drag-and-drop functionality, team collaboration features, and progress tracking. Built with modern web technologies.",
+    technologies: ["React", "Redux", "Express", "PostgreSQL", "Socket.io"],
+    github: "https://github.com/mirsameerirfan",
+    demo: null,
+  },
+  {
+    title: "Weather Analytics App",
+    description: "A weather application that provides current conditions, forecasts, and historical weather data visualization. Features location-based services and interactive weather maps.",
+    technologies: ["Next.js", "TailwindCSS", "REST APIs", "Chart.js"],
+    github: "https://github.com/mirsameerirfan",
+    demo: null,
+  },
+  {
+    title: "Blog CMS Platform",
+    description: "A content management system for bloggers with markdown support, media management, SEO optimization, and analytics dashboard. Includes user roles and permissions management.",
+    technologies: ["Node.js", "Express", "MongoDB", "React", "Bootstrap"],
+    github: "https://github.com/mirsameerirfan",
+    demo: null,
+  },
+];
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <BaseHead 
+      title={`Projects | ${SITE_TITLE}`} 
+      description="Explore my portfolio of web development projects featuring React, Next.js, Node.js, and more."
+    />
+    <style>
+      .page-header {
+        text-align: center;
+        padding: 2em 0 1em;
+      }
+      .page-header h1 {
+        font-size: 3em;
+        margin-bottom: 0.5em;
+        color: rgb(var(--black));
+      }
+      .page-header p {
+        font-size: 1.2em;
+        color: rgb(var(--gray));
+        max-width: 600px;
+        margin: 0 auto;
+      }
+      .projects-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 2em;
+        margin: 3em 0;
+      }
+      .project-card {
+        background: white;
+        border-radius: 12px;
+        padding: 2em;
+        box-shadow: 0 2px 8px rgba(var(--gray), 15%);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+        display: flex;
+        flex-direction: column;
+      }
+      .project-card:hover {
+        transform: translateY(-4px);
+        box-shadow: var(--box-shadow);
+      }
+      .project-card h2 {
+        font-size: 1.5em;
+        margin-bottom: 0.5em;
+        color: rgb(var(--black));
+      }
+      .project-card p {
+        flex-grow: 1;
+        margin-bottom: 1.5em;
+        color: rgb(var(--gray-dark));
+        line-height: 1.6;
+      }
+      .tech-stack {
+        margin-bottom: 1.5em;
+      }
+      .tech-stack-label {
+        font-weight: 700;
+        font-size: 0.9em;
+        color: rgb(var(--gray));
+        margin-bottom: 0.5em;
+        display: block;
+      }
+      .tech-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 0.5em;
+      }
+      .tech-tag {
+        background: var(--accent);
+        color: white;
+        padding: 0.3em 0.8em;
+        border-radius: 4px;
+        font-size: 0.85em;
+        font-weight: 600;
+      }
+      .project-links {
+        display: flex;
+        gap: 1em;
+        flex-wrap: wrap;
+      }
+      .project-link {
+        display: inline-flex;
+        align-items: center;
+        gap: 0.5em;
+        padding: 0.6em 1.2em;
+        background: rgb(var(--gray-light));
+        color: rgb(var(--gray-dark));
+        text-decoration: none;
+        border-radius: 6px;
+        font-weight: 600;
+        transition: background 0.2s ease;
+        font-size: 0.95em;
+      }
+      .project-link:hover {
+        background: var(--accent);
+        color: white;
+      }
+      .project-link.disabled {
+        opacity: 0.5;
+        cursor: not-allowed;
+      }
+      .project-link.disabled:hover {
+        background: rgb(var(--gray-light));
+        color: rgb(var(--gray-dark));
+      }
+      @media (max-width: 720px) {
+        .page-header h1 {
+          font-size: 2em;
+        }
+        .projects-grid {
+          grid-template-columns: 1fr;
+          gap: 1.5em;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <Header />
+    <main>
+      <div class="page-header">
+        <h1>My Projects</h1>
+        <p>
+          A showcase of my work in full-stack web development, featuring modern technologies and best practices.
+        </p>
+      </div>
+
+      <div class="projects-grid">
+        {projects.map((project) => (
+          <div class="project-card">
+            <h2>{project.title}</h2>
+            <p>{project.description}</p>
+            <div class="tech-stack">
+              <span class="tech-stack-label">Tech Stack:</span>
+              <div class="tech-tags">
+                {project.technologies.map((tech) => (
+                  <span class="tech-tag">{tech}</span>
+                ))}
+              </div>
+            </div>
+            <div class="project-links">
+              {project.github && (
+                <a href={project.github} target="_blank" class="project-link">
+                  <span>💻</span> GitHub
+                </a>
+              )}
+              {project.demo ? (
+                <a href={project.demo} target="_blank" class="project-link">
+                  <span>🚀</span> Live Demo
+                </a>
+              ) : (
+                <span class="project-link disabled">
+                  <span>🚀</span> Live Demo
+                </span>
+              )}
+            </div>
+          </div>
+        ))}
+      </div>
+    </main>
+    <Footer />
+  </body>
+</html>
