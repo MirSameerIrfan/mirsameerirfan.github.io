@@ -1,0 +1,30 @@
+---
+// Headline whose words rise out of a mask when it scrolls into view.
+interface Props {
+  text: string;
+  as?: string;
+  class?: string;
+  // Words to set in the accent colour
+  accent?: string[];
+  delay?: number;
+}
+
+const { text, as: Tag = "span", class: className, accent = [], delay = 0 } = Astro.props;
+const words = text.split(" ");
+const bare = (word: string) => word.replace(/[^\p{L}\p{N}]/gu, "");
+---
+
+<Tag class:list={["split", className]} data-reveal style={`--d:${delay}ms`}>
+  <span class="sr-only">{text}</span>
+  {
+    words.map((word, i) => (
+      <Fragment>
+        <span class="w" aria-hidden="true">
+          <span style={`--i:${i}`} class:list={{ "text-accent": accent.includes(bare(word)) }}>
+            {word}
+          </span>
+        </span>{" "}
+      </Fragment>
+    ))
+  }
+</Tag>

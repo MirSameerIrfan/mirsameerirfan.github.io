@@ -1,0 +1,102 @@
+---
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Cover from "../../components/Cover.astro";
+
+export async function getStaticPaths() {
+  const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+  return work.map((entry, index) => ({
+    params: { slug: entry.id },
+    props: { entry, index, next: work[(index + 1) % work.length] },
+  }));
+}
+
+interface Props {
+  entry: CollectionEntry<"work">;
+  index: number;
+  next: CollectionEntry<"work">;
+}
+
+const { entry, index, next } = Astro.props;
+const { title, summary, year, role, status, stack, repo, live } = entry.data;
+const { Content } = await render(entry);
+---
+
+<Base title={title} description={summary}>
+  <article>
+    <header class="wrap pt-12 md:pt-20">
+      <a href="/work" class="label link" data-reveal>← All work</a>
+      <h1 class="display display-xl mt-8" transition:name={`work-title-${entry.id}`}>{title}</h1>
+      <p class="mt-8 max-w-[34ch] font-display text-[clamp(1.3rem,2.2vw,1.9rem)] leading-[1.2] tracking-[-0.015em] [font-stretch:88%]" data-reveal style="--d:150ms">
+        {summary}
+      </p>
+
+      <dl class="mt-14 grid grid-cols-2 gap-x-6 gap-y-8 border-t border-line pt-6 md:grid-cols-12" data-reveal style="--d:250ms">
+        <div class="md:col-span-2">
+          <dt class="label">Year</dt>
+          <dd class="mt-2 text-[0.95rem]">{year}</dd>
+        </div>
+        <div class="md:col-span-3">
+          <dt class="label">Role</dt>
+          <dd class="mt-2 text-[0.95rem]">{role}</dd>
+        </div>
+        {
+          status && (
+            <div class="md:col-span-2">
+              <dt class="label">Status</dt>
+              <dd class="mt-2 text-[0.95rem]">{status}</dd>
+            </div>
+          )
+        }
+        <div class="col-span-2 md:col-span-5">
+          <dt class="label">Stack</dt>
+          <dd class="mt-2 text-[0.95rem] text-muted">{stack.join(", ")}</dd>
+        </div>
+      </dl>
+
+      {
+        (live || repo) && (
+          <div class="mt-10 flex flex-wrap gap-3" data-reveal style="--d:320ms">
+            {live && (
+              <a href={live} target="_blank" rel="noopener" class="btn btn-solid" data-magnetic>
+                Visit site <span aria-hidden="true">↗</span>
+              </a>
+            )}
+            {repo && (
+              <a href={repo} target="_blank" rel="noopener" class="btn" data-magnetic>
+                Source on GitHub <span aria-hidden="true">↗</span>
+              </a>
+            )}
+          </div>
+        )
+      }
+    </header>
+
+    <div class="wrap mt-14 md:mt-20" data-reveal>
+      <div class="aspect-[16/10] overflow-hidden border border-line">
+        <Cover entry={entry} index={index} sizes="(min-width: 1440px) 1330px, 92vw" eager />
+      </div>
+    </div>
+
+    <div class="wrap mt-16 grid gap-8 md:mt-24 md:grid-cols-12">
+      <p class="label md:col-span-3">Case study</p>
+      <div class="prose max-w-[68ch] md:col-span-9">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {
+    next.id !== entry.id && (
+      <nav class="wrap mt-28 md:mt-40" aria-label="Next project">
+        <a href={`/work/${next.id}/`} class="group block border-t border-line pt-6">
+          <span class="label">Next project</span>
+          <span class="display display-lg mt-4 flex items-end justify-between gap-6 transition-colors duration-300 group-hover:text-accent">
+            {next.data.title}
+            <span class="transition-transform duration-700 ease-expo group-hover:translate-x-2 group-hover:-translate-y-2" aria-hidden="true">↗</span>
+          </span>
+        </a>
+      </nav>
+    )
+  }
+</Base>

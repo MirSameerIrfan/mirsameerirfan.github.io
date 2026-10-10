@@ -1,105 +1,18 @@
 ---
-import BaseHead from "../components/BaseHead.astro";
-import Header from "../components/Header.astro";
-import Footer from "../components/Footer.astro";
-import { SITE_TITLE } from "../consts";
+import Base from "../layouts/Base.astro";
+import Split from "../components/Split.astro";
 ---
 
-<!doctype html>
-<html lang="en">
-  <head>
-    <BaseHead 
-      title={`404: Not Found | ${SITE_TITLE}`} 
-      description="Page not found"
-    />
-    <style>
-      .error-container {
-        text-align: center;
-        padding: 4em 2em;
-        min-height: 60vh;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-      }
-      .error-code {
-        font-size: 8em;
-        font-weight: 700;
-        color: var(--accent);
-        margin: 0;
-        line-height: 1;
-      }
-      .error-title {
-        font-size: 2em;
-        margin: 0.5em 0;
-        color: rgb(var(--black));
-      }
-      .error-message {
-        font-size: 1.2em;
-        color: rgb(var(--gray));
-        margin-bottom: 2em;
-        max-width: 500px;
-      }
-      .error-links {
-        display: flex;
-        gap: 1em;
-        flex-wrap: wrap;
-        justify-content: center;
-      }
-      .error-link {
-        display: inline-block;
-        padding: 0.8em 2em;
-        background: var(--accent);
-        color: white;
-        text-decoration: none;
-        border-radius: 8px;
-        font-weight: 700;
-        transition: background 0.2s ease;
-      }
-      .error-link:hover {
-        background: var(--accent-dark);
-        color: white;
-      }
-      .error-link.secondary {
-        background: white;
-        color: var(--accent);
-        border: 2px solid var(--accent);
-      }
-      .error-link.secondary:hover {
-        background: var(--accent);
-        color: white;
-      }
-      @media (max-width: 720px) {
-        .error-code {
-          font-size: 5em;
-        }
-        .error-title {
-          font-size: 1.5em;
-        }
-        .error-links {
-          flex-direction: column;
-          width: 100%;
-          max-width: 300px;
-        }
-      }
-    </style>
-  </head>
-  <body>
-    <Header />
-    <main>
-      <div class="error-container">
-        <h1 class="error-code">404</h1>
-        <h2 class="error-title">Page Not Found</h2>
-        <p class="error-message">
-          Oops! The page you're looking for doesn't exist. It might have been moved or deleted.
-        </p>
-        <div class="error-links">
-          <a href="/" class="error-link">Go Home</a>
-          <a href="/blog" class="error-link secondary">Read Blog</a>
-          <a href="/projects" class="error-link secondary">View Projects</a>
-        </div>
-      </div>
-    </main>
-    <Footer />
-  </body>
-</html>
+<Base title="Page not found" description="This page does not exist.">
+  <section class="wrap flex min-h-[70svh] flex-col justify-center pt-16">
+    <p class="label" data-reveal>Error 404</p>
+    <Split as="h1" class="display display-xl mt-6 max-w-[14ch]" text="Nothing at this address." accent={["Nothing"]} />
+    <p class="mt-8 max-w-[44ch] text-muted" data-reveal style="--d:300ms">
+      The page may have moved, or the link was wrong to begin with.
+    </p>
+    <div class="mt-10 flex flex-wrap gap-3" data-reveal style="--d:400ms">
+      <a href="/" class="btn btn-solid">Back home</a>
+      <a href="/work" class="btn">See the work</a>
+    </div>
+  </section>
+</Base>

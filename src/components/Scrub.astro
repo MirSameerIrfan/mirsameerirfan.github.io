@@ -1,0 +1,13 @@
+---
+// Paragraph whose words brighten as they scroll through the viewport (CSS only).
+interface Props {
+  text: string;
+  class?: string;
+}
+
+const { text, class: className } = Astro.props;
+---
+
+<p class:list={["scrub", className]}>
+  {text.split(" ").map((word) => <Fragment><span class="sw">{word}</span>{" "}</Fragment>)}
+</p>

@@ -1,22 +1,25 @@
 # mirsameerirfan.github.io
 
-Personal portfolio website showcasing my work as a full-stack developer. Built with Astro, featuring blog posts, project showcases, and technical content.
+Personal site of Mir Sameer Irfan: selected work, experience and writing. Built with Astro and Tailwind CSS, with no client-side framework.
 
 ## 🚀 Tech Stack
 
 - **[Astro](https://astro.build)** - Modern static site generator
 - **[MDX](https://mdxjs.com/)** - Markdown with JSX support for blog posts
 - **TypeScript** - Type-safe development
-- **CSS** - Custom styling with responsive design
+- **[Tailwind CSS 4](https://tailwindcss.com)** - Styling, with design tokens in `src/styles/global.css`
+- **View Transitions** - Page-to-page animation through Astro's `ClientRouter`
 
 ## 📦 Project Structure
 
 ```
 /
-├── public/             # Static assets (fonts, images)
+├── public/             # Static assets (favicon, social preview image)
 ├── src/
 │   ├── components/     # Reusable Astro components
-│   ├── content/        # Blog posts and content collections
+│   ├── assets/         # Fonts and project screenshots
+│   ├── content/        # Blog posts (blog/) and case studies (work/)
+│   ├── scripts/        # site.ts: scroll reveals, cursor preview, hero dot field
 │   ├── layouts/        # Page layouts
 │   ├── pages/          # File-based routing pages
 │   ├── styles/         # Global styles
@@ -79,16 +82,37 @@ Example frontmatter:
 title: 'Your Post Title'
 description: 'A brief description of your post'
 pubDate: 'Jan 01 2024'
-heroImage: '../../assets/your-image.jpg'
 ---
 ```
+
+## 🗂️ Adding a Project
+
+Add a Markdown file in `src/content/work/`. It appears on the home page, on `/work`, and gets its own case-study page.
+
+```yaml
+---
+title: 'Project name'
+summary: 'One sentence shown in lists and under the title'
+year: 2026
+role: 'What you did'
+status: 'Live'                 # optional
+order: 3                       # lower numbers come first
+stack: ['TypeScript', 'React']
+repo: 'https://github.com/...' # optional
+live: 'https://...'            # optional
+cover: '../../assets/work/screenshot.jpg' # optional
+coverAlt: 'What the screenshot shows'
+---
+```
+
+If `cover` is left out, a typographic cover is generated from the title and stack.
 
 ## ✨ Features
 
 - 📱 Fully responsive design
 - ♿ Accessible components
 - 📝 MDX support for rich blog content
-- 🎨 Clean, professional design
+- 🎞️ Motion that respects `prefers-reduced-motion`
 - 🚀 Fast performance with Astro
 - 🔍 SEO optimized
 
