@@ -1,38 +1,109 @@
 ---
-import Layout from "../layouts/BlogPost.astro";
-import AboutHeroImage from "../assets/blog-placeholder-about.jpg";
+import Base from "../layouts/Base.astro";
+import Split from "../components/Split.astro";
+import { EDUCATION, EXPERIENCE, TOOLKIT } from "../consts";
 ---
 
-<Layout
-  title="About Me"
-  description="Meet Mir Sameer Irfan, a full-stack developer passionate about building scalable web applications with React, Next.js, and Node.js."
-  pubDate={new Date("2025-07-05")}
-  heroImage={AboutHeroImage}
+<Base
+  title="About"
+  description="Mir Sameer Irfan is an engineer in St. Catharines, Ontario, with five years across software development and production systems."
 >
-  <p>
-    Hello! I'm Sameer, a full-stack developer based in Kitchener, Ontario. With
-    over three years of experience, I specialize in crafting robust and scalable
-    web applications that deliver seamless user experiences.
-  </p>
+  <section class="wrap pt-16 md:pt-24">
+    <p class="label" data-reveal>About</p>
+    <Split
+      as="h1"
+      class="display display-xl mt-6 max-w-[15ch]"
+      text="I build software. I also get called when it breaks."
+      accent={["build"]}
+    />
 
-  <p>
-    My passion lies in bringing ideas to life across the entire stack. On the
-    frontend, I build responsive and pixel-perfect interfaces primarily with
-    ReactJS and Next.js, leveraging tools like Redux, TailwindCSS, and
-    Bootstrap. For the backend, I work with Node.js and Express, managing data
-    with MongoDB and PostgreSQL, and designing efficient REST APIs.
-  </p>
+    <div class="mt-16 grid gap-8 md:mt-24 md:grid-cols-12">
+      <p class="label md:col-span-3">Background</p>
+      <div class="max-w-[62ch] space-y-6 text-[1.08rem] leading-[1.7] text-[#cfcdc7] md:col-span-9" data-reveal>
+        <p>
+          I'm an engineer based in St. Catharines, Ontario, with a computer science degree and five years across software
+          development and production systems. I started as a developer in 2019, building React and TypeScript frontends
+          and Java/Spring Boot APIs for client projects, and integrating Stripe payments that I then debugged in live
+          production.
+        </p>
+        <p>
+          At Accenture I work on an enterprise AI platform. When something fails, including inference services running
+          in Docker on Kubernetes and talking over gRPC, I reproduce it, read the application code to find the failure
+          logic, and query PostgreSQL directly. I resolve the majority of those cases without engineering involvement.
+        </p>
+        <p>
+          I also build the tooling around that work. My Python scripts run triage, health inspection and data
+          verification on every new ticket, and I built and operate a multi-agent investigation system in which parallel
+          LLM agents read historical cases and procedures through MCP tools and surface a resolution path before a human
+          starts.
+        </p>
+      </div>
+    </div>
+  </section>
 
-  <p>
-    I thrive in agile environments, collaborating closely with cross-functional
-    teams to tackle complex challenges and optimize performance. From developing
-    user-friendly interfaces to deploying applications on cloud platforms with
-    CI/CD pipelines, I enjoy every step of the development lifecycle.
-  </p>
+  <section class="wrap pt-28 md:pt-40">
+    <div class="section-head" data-reveal>
+      <h2 class="label">Experience</h2>
+      <span class="label">({String(EXPERIENCE.length).padStart(2, "0")})</span>
+    </div>
+    <ol>
+      {
+        EXPERIENCE.map((job) => (
+          <li class="grid gap-4 border-b border-line py-10 md:grid-cols-12 md:gap-6" data-reveal>
+            <p class="label pt-1.5 md:col-span-3">{job.period}</p>
+            <div class="md:col-span-9">
+              <h3 class="display display-sm">{job.role}</h3>
+              <p class="mt-2 text-[0.95rem] text-muted">
+                {job.company} · {job.place}
+              </p>
+              <div class="prose mt-6 max-w-[68ch] !text-[0.98rem]">
+                <ul>
+                  {job.points.map((point) => <li>{point}</li>)}
+                </ul>
+              </div>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
 
-  <p>
-    Beyond the code, I'm constantly exploring new technologies and sharing
-    insights into the world of web development. You can reach out to me via
-    linkedIn or connect with me on GitHub.
-  </p>
-</Layout>
+  <section class="wrap pt-28 md:pt-40">
+    <div class="section-head" data-reveal>
+      <h2 class="label">Toolkit</h2>
+      <span class="label">({String(TOOLKIT.length).padStart(2, "0")})</span>
+    </div>
+    <div class="grid gap-x-6 gap-y-10 pt-10 sm:grid-cols-2 lg:grid-cols-4">
+      {
+        TOOLKIT.map((group, i) => (
+          <div data-reveal style={`--d:${i * 70}ms`}>
+            <h3 class="label text-accent">{group.group}</h3>
+            <ul class="mt-4 space-y-1.5 text-[0.95rem]">
+              {group.items.map((item) => <li>{item}</li>)}
+            </ul>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="wrap pt-28 md:pt-40">
+    <div class="section-head" data-reveal>
+      <h2 class="label">Education</h2>
+      <span class="label">({String(EDUCATION.length).padStart(2, "0")})</span>
+    </div>
+    <ol>
+      {
+        EDUCATION.map((item) => (
+          <li class="grid gap-3 border-b border-line py-8 md:grid-cols-12 md:gap-6" data-reveal>
+            <p class="label pt-1.5 md:col-span-3">{item.period}</p>
+            <div class="md:col-span-9">
+              <h3 class="display display-sm">{item.title}</h3>
+              <p class="mt-2 text-[0.95rem] text-muted">{item.school}</p>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+</Base>

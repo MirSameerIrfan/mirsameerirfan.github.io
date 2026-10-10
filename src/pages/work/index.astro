@@ -1,0 +1,21 @@
+---
+import { getCollection } from "astro:content";
+import Base from "../../layouts/Base.astro";
+import Split from "../../components/Split.astro";
+import WorkList from "../../components/WorkList.astro";
+
+const work = (await getCollection("work")).sort((a, b) => a.data.order - b.data.order);
+---
+
+<Base title="Work" description="Full-stack projects designed and built by Mir Sameer Irfan.">
+  <section class="wrap pt-16 md:pt-24">
+    <p class="label" data-reveal>Work ({String(work.length).padStart(2, "0")})</p>
+    <Split as="h1" class="display display-xl mt-6 max-w-[14ch]" text="Things I've built." />
+    <p class="mt-8 max-w-[52ch] text-[1.05rem] text-muted" data-reveal style="--d:300ms">
+      Products I've designed and built end to end, written up with the decisions and the bugs left in.
+    </p>
+    <div class="mt-16 border-t border-line md:mt-24">
+      <WorkList items={work} />
+    </div>
+  </section>
+</Base>

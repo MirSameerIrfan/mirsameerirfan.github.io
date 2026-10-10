@@ -1,0 +1,37 @@
+---
+// A project's screenshot, or a generated typographic cover when it has none.
+import { Image } from "astro:assets";
+import type { CollectionEntry } from "astro:content";
+
+interface Props {
+  entry: CollectionEntry<"work">;
+  index: number;
+  sizes?: string;
+  eager?: boolean;
+}
+
+const { entry, index, sizes = "(min-width: 768px) 440px, 100vw", eager = false } = Astro.props;
+const { cover, coverAlt, title, stack, year } = entry.data;
+const number = String(index + 1).padStart(2, "0");
+---
+
+{
+  cover ? (
+    <Image
+      src={cover}
+      alt={coverAlt ?? `Screenshot of ${title}`}
+      widths={[480, 880, 1440, 2000]}
+      sizes={sizes}
+      loading={eager ? "eager" : "lazy"}
+      class="h-full w-full object-cover object-top"
+    />
+  ) : (
+    <div class="plate" role="img" aria-label={`Cover for ${title}`}>
+      <span class="plate-index" aria-hidden="true">{number}</span>
+      <span class="plate-title">{title}</span>
+      <span class="plate-meta">
+        {stack.slice(0, 4).join(" / ")} — {year}
+      </span>
+    </div>
+  )
+}

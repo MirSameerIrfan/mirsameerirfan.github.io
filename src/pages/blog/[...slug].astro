@@ -1,21 +1,60 @@
 ---
-import { type CollectionEntry, getCollection } from 'astro:content';
-import BlogPost from '../../layouts/BlogPost.astro';
-import { render } from 'astro:content';
+import { type CollectionEntry, getCollection, render } from "astro:content";
+import Base from "../../layouts/Base.astro";
 
 export async function getStaticPaths() {
-	const posts = await getCollection('blog');
-	return posts.map((post) => ({
-		params: { slug: post.id },
-		props: post,
-	}));
+  const posts = await getCollection("blog");
+  return posts.map((post) => ({
+    params: { slug: post.id },
+    props: post,
+  }));
 }
-type Props = CollectionEntry<'blog'>;
+type Props = CollectionEntry<"blog">;
 
 const post = Astro.props;
-const { Content } = await render(post);
+const { title, description, pubDate, updatedDate } = post.data;
+const { Content, headings } = await render(post);
+
+const dateFormat = new Intl.DateTimeFormat("en-CA", { year: "numeric", month: "long", day: "numeric" });
+const minutes = Math.max(1, Math.round((post.body ?? "").split(/\s+/).length / 220));
+const contents = headings.filter((heading) => heading.depth === 2);
 ---
 
-<BlogPost {...post.data}>
-	<Content />
-</BlogPost>
+<Base title={title} description={description} article>
+  <div class="progress" aria-hidden="true"></div>
+  <article class="wrap pt-12 md:pt-20">
+    <a href="/blog" class="label link" data-reveal>← All writing</a>
+    <header class="mt-8 border-b border-line pb-10">
+      <h1 class="display display-lg max-w-[18ch]" transition:name={`post-title-${post.id}`}>{title}</h1>
+      <p class="label mt-8" data-reveal style="--d:150ms">
+        <time datetime={pubDate.toISOString()}>{dateFormat.format(pubDate)}</time>
+        {updatedDate && <span> · Updated {dateFormat.format(updatedDate)}</span>}
+        <span> · {minutes} min read</span>
+      </p>
+    </header>
+
+    <div class="mt-12 grid gap-10 md:grid-cols-12">
+      <aside class="md:col-span-3">
+        {
+          contents.length > 1 && (
+            <nav aria-label="Contents" class="md:sticky md:top-24">
+              <p class="label">Contents</p>
+              <ol class="mt-4 space-y-2.5">
+                {contents.map((heading) => (
+                  <li>
+                    <a href={`#${heading.slug}`} class="link text-[0.88rem] leading-snug text-muted">
+                      {heading.text}
+                    </a>
+                  </li>
+                ))}
+              </ol>
+            </nav>
+          )
+        }
+      </aside>
+      <div class="prose min-w-0 max-w-[68ch] md:col-span-9">
+        <Content />
+      </div>
+    </div>
+  </article>
+</Base>

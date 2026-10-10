@@ -1,0 +1,47 @@
+---
+import type { CollectionEntry } from "astro:content";
+import Cover from "./Cover.astro";
+
+interface Props {
+  items: CollectionEntry<"work">[];
+}
+
+const { items } = Astro.props;
+const number = (i: number) => String(i + 1).padStart(2, "0");
+---
+
+<ul class="work-list" data-preview-list>
+  {
+    items.map((item, i) => (
+      <li data-reveal style={`--d:${i * 90}ms`}>
+        <a href={`/work/${item.id}/`} class="work-row" data-preview-row>
+          <span class="order-first block aspect-[16/10] overflow-hidden border border-line md:hidden">
+            <Cover entry={item} index={i} sizes="100vw" />
+          </span>
+          <span class="label">
+            {number(i)}
+            <span class="md:hidden"> / {item.data.year}</span>
+          </span>
+          <span class="work-title display display-md" transition:name={`work-title-${item.id}`}>
+            {item.data.title}
+          </span>
+          <span class="max-w-[40ch] text-[0.95rem] leading-snug text-muted">{item.data.summary}</span>
+          <span class="label hidden md:block">{item.data.year}</span>
+          <span class="work-arrow hidden text-xl md:block" aria-hidden="true">↗</span>
+        </a>
+      </li>
+    ))
+  }
+</ul>
+
+<div class="preview" data-preview aria-hidden="true">
+  <div class="preview-inner">
+    {
+      items.map((item, i) => (
+        <div class="preview-item" data-preview-item>
+          <Cover entry={item} index={i} />
+        </div>
+      ))
+    }
+  </div>
+</div>

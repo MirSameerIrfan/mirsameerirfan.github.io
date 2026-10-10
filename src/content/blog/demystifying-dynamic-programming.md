@@ -2,10 +2,7 @@
 title: "Demystifying Dynamic Programming"
 description: "Dynamic Programming: Deep Dive for JavaScript Developers"
 pubDate: "Jul 07 2025"
-heroImage: "../../assets/blog-placeholder-3.jpg"
 ---
-
-# Demystifying Dynamic Programming: A Deep Dive for JavaScript Developers
 
 Hey everyone, I've seen many concepts come and go. But some, like **Dynamic Programming (DP)**, are timeless pillars of efficient algorithm design. Yet, it's a topic that often sends shivers down the spines of even seasoned developers.
 
@@ -72,7 +69,7 @@ console.log(fibonacci(45));
 
 This solution has an exponential time complexity of O(2n), which is terrible for larger values of n.
 
-## Memoization (Top-Down)
+#### Memoization (Top-Down)
 
 ```javascript
 function fibonacciMemo(n, memo = {}) {
@@ -91,7 +88,7 @@ console.log(fibonacciMemo(45)); // Blazingly fast!
 
 With memoization, the time complexity drops to O(n) because each Fibonacci number is calculated only once.
 
-## Tabulation (Bottom-Up)
+#### Tabulation (Bottom-Up)
 
 ```javascript
 function fibonacciTab(n) {
@@ -118,7 +115,7 @@ Imagine you're a thief with a knapsack that can hold a limited weight. You're in
 
 This is a classic optimization problem that can be solved efficiently using Dynamic Programming.
 
-## Tabulation Approach
+#### Tabulation Approach
 
 ```javascript
 function knapsack(weights, values, capacity) {
@@ -158,7 +155,7 @@ The Longest Common Subsequence (LCS) problem involves finding the longest subseq
 
 For example, the LCS of "AGGTAB" and "GXTXAYB" is "GTAB". This has applications in bioinformatics (comparing DNA sequences) and version control systems (like Git's diff).
 
-## Tabulation Approach
+#### Tabulation Approach
 
 ```javascript
 function longestCommonSubsequence(text1, text2) {
@@ -188,7 +185,7 @@ console.log(longestCommonSubsequence(text1, text2)); // Output: 4
 
 The time complexity for this solution is O(mcdotn), where m and n are the lengths of the two strings.
 
-# Real-World Applications of Dynamic Programming
+## Real-World Applications of Dynamic Programming
 
 Dynamic Programming isn't just for coding interviews. It's a powerful tool used in a variety of real-world applications:
 
@@ -210,7 +207,7 @@ Dynamic Programming isn't just for coding interviews. It's a powerful tool used 
 - **Shortest Path Algorithms**  
   In networking and mapping, DP is used to find the shortest path between two points (e.g., the Floyd-Warshall algorithm).
 
-# Final Thoughts: Embrace the Power of DP
+## Final Thoughts: Embrace the Power of DP
 
 Dynamic Programming is more than just an algorithmic technique; it's a way of thinking. It teaches us to break down complex problems into manageable pieces and to be efficient by reusing our work. While the initial learning curve can be steep, the rewards in terms of algorithmic performance and problem-solving skills are immense.
 
